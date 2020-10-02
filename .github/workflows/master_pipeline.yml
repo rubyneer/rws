@@ -28,3 +28,7 @@ jobs:
       - name: Run linter
         run: |
           bundle exec rubocop
+
+      - name: Run tests
+        run: |
+          bundle exec rspec spec
