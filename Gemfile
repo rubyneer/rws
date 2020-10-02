@@ -6,6 +6,10 @@ git_source(:github) { |repo_name| "https://github.com/#{repo_name}" }
 
 gemspec
 
+group :development, :test do
+  gem 'pry-byebug'
+end
+
 group :development do
   gem 'rubocop', '~> 0.91.1'
 end
