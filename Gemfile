@@ -9,3 +9,7 @@ gemspec
 group :development do
   gem 'rubocop', '~> 0.91.1'
 end
+
+group :test do
+  gem 'rspec', '~> 3.9'
+end
