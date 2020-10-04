@@ -12,6 +12,9 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
+    env:
+      COVERAGE: true
+
     steps:
       - uses: actions/checkout@v2
 
@@ -32,3 +35,9 @@ jobs:
       - name: Run tests
         run: |
           bundle exec rspec spec
+
+      - name: Code coverage
+        uses: codecov/codecov-action@v1.0.13
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          env_vars: COVERAGE
