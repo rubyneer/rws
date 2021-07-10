@@ -12,7 +12,7 @@ RSpec.describe RWS::Client do
     let(:fd) { IO.sysopen('/dev/zero', 'r') }
 
     it 'closes opened IO stream' do
-      expect { client.close }.to change { io.closed? }.from(false).to(true)
+      expect { client.close }.to change(io, :closed?).from(false).to(true)
     end
   end
 
