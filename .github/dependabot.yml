@@ -1,0 +1,15 @@
+version: 2
+
+updates:
+  - package-ecosystem: 'bundler'
+    directory: '/'
+    open-pull-requests-limit: 10
+    schedule:
+      interval: 'daily'
+    allow:
+      - dependency-type: 'direct'
+      - dependency-name: '*'
+    labels:
+      - 'Dependencies'
+    reviewers:
+      - 'irastypain'
