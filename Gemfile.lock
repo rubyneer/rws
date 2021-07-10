@@ -24,7 +24,7 @@ GEM
       byebug (~> 11.0)
       pry (~> 0.13.0)
     rainbow (3.0.0)
-    rake (10.5.0)
+    rake (13.0.6)
     regexp_parser (2.1.1)
     rexml (3.2.4)
     rspec (3.10.0)
@@ -67,7 +67,7 @@ DEPENDENCIES
   bundler (~> 2.1)
   codecov
   pry-byebug
-  rake (~> 10.0)
+  rake (~> 13.0)
   rspec (~> 3.10)
   rubocop (~> 0.91.1)
   rws!
