@@ -15,9 +15,13 @@ RSpec.describe RWS::CLI do
     end
   end
 
-  before { allow(RWS::Server).to receive(:new).and_call_original }
+  before do
+    server_instance = instance_double(RWS::Server)
+    allow(server_instance).to receive(:run)
+    allow(RWS::Server).to receive(:new).and_return(server_instance)
+  end
 
-  xdescribe '-p, --port PORT' do
+  describe '-p, --port PORT' do
     let(:argv) { ['-p', '8080'] }
 
     it 'run server with port param' do
@@ -29,7 +33,7 @@ RSpec.describe RWS::CLI do
     include_examples 'missing option argument', '-p'
   end
 
-  xdescribe '--host HOST' do
+  describe '--host HOST' do
     let(:argv) { ['--host', '0.0.0.0'] }
 
     it 'run server with host param' do
