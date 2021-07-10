@@ -16,5 +16,5 @@ end
 
 group :test do
   gem 'codecov', require: false
-  gem 'rspec', '~> 3.9'
+  gem 'rspec', '~> 3.10'
 end
