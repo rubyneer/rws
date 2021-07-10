@@ -4,7 +4,7 @@ module RWS
   class Parser
     def self.parse_start_line(io)
       start_line = io.gets
-      start_line.split(' ')
+      start_line.split
     end
 
     def self.parse_headers(io)
