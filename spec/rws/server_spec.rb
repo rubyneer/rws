@@ -9,7 +9,7 @@ RSpec.describe RWS::Server do
 
   let(:params) { { host: '0.0.0.0', port: 8080 } }
 
-  before { allow(RWS::Server).to receive(:new).and_call_original }
+  before { allow(described_class).to receive(:new).and_call_original }
 
   xit { expect { run_server }.not_to raise_error }
 end
