@@ -1,11 +1,13 @@
 # frozen_string_literal: true
 
+if ENV['CI']
+  require 'codecov'
+  SimpleCov.formatter = SimpleCov::Formatter::Codecov
+end
+
 if ENV['COVERAGE']
   require 'simplecov'
   SimpleCov.start
-
-  require 'codecov'
-  SimpleCov.formatter = SimpleCov::Formatter::Codecov
 end
 
 # See http://rubydoc.info/gems/rspec-core/RSpec/Core/Configuration
