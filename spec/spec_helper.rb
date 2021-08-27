@@ -1,13 +1,14 @@
 # frozen_string_literal: true
 
-if ENV['CI']
-  require 'codecov'
-  SimpleCov.formatter = SimpleCov::Formatter::Codecov
-end
-
-if ENV['COVERAGE']
+if ENV['COVERAGE'] == 'true'
   require 'simplecov'
   SimpleCov.start
+
+  if ENV['CI'] == 'true'
+    require 'codecov'
+    # Only generate coverage report, not to send to Codecov (GitHub Actions does it)
+    SimpleCov.formatter = Codecov::SimpleCov::Formatter
+  end
 end
 
 # See http://rubydoc.info/gems/rspec-core/RSpec/Core/Configuration
