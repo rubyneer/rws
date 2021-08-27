@@ -1,0 +1,40 @@
+name: Branch pipeline
+
+on:
+  push:
+    branches-ignore:
+      - master
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    env:
+      COVERAGE: true
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Set up Ruby 2.7.4
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '2.7.4'
+
+      - name: Build
+        run: |
+          gem install bundler -v 2.1.4
+          bundle install --jobs 4 --retry 3
+
+      - name: Run linter
+        run: |
+          bundle exec rubocop
+
+      - name: Run tests
+        run: |
+          bundle exec rspec spec
+
+      - name: Code coverage
+        uses: codecov/codecov-action@v1.0.13
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          env_vars: COVERAGE
