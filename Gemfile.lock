@@ -14,7 +14,7 @@ GEM
     diff-lcs (1.4.4)
     docile (1.4.0)
     method_source (1.0.0)
-    parallel (1.20.1)
+    parallel (1.21.0)
     parser (3.0.2.0)
       ast (~> 2.4.1)
     pry (0.13.1)
