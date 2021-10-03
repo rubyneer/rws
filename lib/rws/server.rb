@@ -32,8 +32,8 @@ module RWS
         client = get_client(server)
         break unless client
 
-        handle_request(client)
-        client.send_response(response.to_s)
+        request = handle_request(client)
+        client.send_response(build_response(request))
 
         client.close
       end
@@ -47,15 +47,16 @@ module RWS
     end
 
     def handle_request(client)
-      method, url, protocol_version = RWS::Parser.parse_start_line(client.io)
-      headers = RWS::Parser.parse_headers(client.io)
+      request = RWS::Request.new(client).handle!
 
-      puts "[#{Time.now}] #{protocol_version} #{method} '#{url}'"
+      puts "[#{Time.now}] #{request.method} '#{request.url}'"
       puts 'Headers:'
-      puts headers.map { |header, value| "\t#{header}: #{value}" }.join("\n")
+      puts request.headers.map { |header, value| "\t#{header}: #{value}" }.join("\n")
+
+      request
     end
 
-    def response # rubocop:disable Metrics/MethodLength
+    def build_response(_request) # rubocop:disable Metrics/MethodLength
       status = '200'
       headers = { 'Content-Type' => 'text/html' }
       body = <<~HTML
