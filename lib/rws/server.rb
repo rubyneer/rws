@@ -5,6 +5,8 @@ require 'socket'
 require 'rws'
 require 'rws/client'
 require 'rws/parser'
+require 'rws/response'
+require 'rws/request'
 
 module RWS
   class Server
@@ -33,7 +35,7 @@ module RWS
         break unless client
 
         request = handle_request(client)
-        client.send_response(build_response(request))
+        client.send_response(RWS::Response.new({ request: request }, app))
 
         client.close
       end
@@ -56,31 +58,25 @@ module RWS
       request
     end
 
-    def build_response(_request) # rubocop:disable Metrics/MethodLength
-      status = '200'
-      headers = { 'Content-Type' => 'text/html' }
-      body = <<~HTML
-        <!doctype html>
-        <html>
-          <head>
-            <meta content="text/html; charset=UTF-8">
-            <title>Welcome to RWS!</title>
-          </head>
-          <body>
-            <h1>Welcome to RWS!</h1>
-          </body>
-        </html>
-      HTML
-
-      [start_line(status), prepare_headers(headers), '', body].join("\r\n")
-    end
-
-    def start_line(status)
-      "HTTP/1.1 #{status}"
-    end
-
-    def prepare_headers(headers)
-      headers.map { |name, value| "#{name}: #{value}" }.join("\n")
+    def app # rubocop:disable Metrics/MethodLength
+      lambda do
+        [
+          '200',
+          { 'Content-Type' => 'text/html' },
+          <<~HTML
+            <!doctype html>
+            <html>
+              <head>
+                <meta content="text/html; charset=UTF-8">
+                <title>Welcome to RWS!</title>
+              </head>
+              <body>
+                <h1>Welcome to RWS!</h1>
+              </body>
+            </html>
+          HTML
+        ]
+      end
     end
 
     def shutdown
