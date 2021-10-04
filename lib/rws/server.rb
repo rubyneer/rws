@@ -4,6 +4,7 @@ require 'socket'
 
 require 'rws'
 require 'rws/client'
+require 'rws/configuration'
 require 'rws/parser'
 require 'rws/response'
 require 'rws/request'
@@ -16,6 +17,7 @@ module RWS
     def initialize(host: nil, port: nil)
       @host = host || DEFAULT_HOST
       @port = port || DEFAULT_PORT
+      @config = RWS::Configuration.new.load
     end
 
     def run
@@ -35,7 +37,8 @@ module RWS
         break unless client
 
         request = handle_request(client)
-        client.send_response(RWS::Response.new({ request: request }, app))
+        response = RWS::Response.new({ request: request }, @config[:app]).build
+        client.send_response(response)
 
         client.close
       end
@@ -56,27 +59,6 @@ module RWS
       puts request.headers.map { |header, value| "\t#{header}: #{value}" }.join("\n")
 
       request
-    end
-
-    def app # rubocop:disable Metrics/MethodLength
-      lambda do
-        [
-          '200',
-          { 'Content-Type' => 'text/html' },
-          <<~HTML
-            <!doctype html>
-            <html>
-              <head>
-                <meta content="text/html; charset=UTF-8">
-                <title>Welcome to RWS!</title>
-              </head>
-              <body>
-                <h1>Welcome to RWS!</h1>
-              </body>
-            </html>
-          HTML
-        ]
-      end
     end
 
     def shutdown
