@@ -5,7 +5,6 @@ require 'socket'
 require 'rws'
 require 'rws/client'
 require 'rws/configuration'
-require 'rws/parser'
 require 'rws/response'
 require 'rws/request'
 
