@@ -1,36 +1,31 @@
 # frozen_string_literal: true
 
+require 'rws/builder'
+
 module RWS
   class Configuration
-    def initialize
-      @app = app
+    DEFAULT_CONFIG_FILE = 'config.ru'
+
+    def initialize(config_file = nil)
+      @config_file = config_file || DEFAULT_CONFIG_FILE
     end
 
     def load
-      { app: @app }
+      { app: rackup_app }
     end
 
     private
 
-    def app # rubocop:disable Metrics/MethodLength
-      lambda do |_env|
-        [
-          200,
-          { 'Content-Type' => 'text/html' },
-          <<~HTML
-            <!doctype html>
-            <html>
-              <head>
-                <meta content="text/html; charset=UTF-8">
-                <title>Welcome to RWS!</title>
-              </head>
-              <body>
-                <h1>Welcome to RWS!</h1>
-              </body>
-            </html>
-          HTML
-        ]
-      end
+    def rackup_app
+      raise "Missing rackup file '#{@config_file}'" unless File.exist?(@config_file)
+
+      config = File.read(@config_file)
+      builder = <<~"BUILDER"
+        RWS::Builder.new {
+          #{config}
+        }.to_app
+      BUILDER
+      eval builder, TOPLEVEL_BINDING, __FILE__, __LINE__ # rubocop:disable Security/Eval
     end
   end
 end
