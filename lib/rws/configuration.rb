@@ -20,8 +20,12 @@ module RWS
       raise "Missing rackup file '#{@config_file}'" unless File.exist?(@config_file)
 
       config = File.read(@config_file)
-
-      eval "RWS::Builder.new {\n#{config}\n}.to_app", TOPLEVEL_BINDING, @config_file, 0
+      builder = <<~"BUILDER"
+        RWS::Builder.new {
+          #{config}
+        }.to_app
+      BUILDER
+      eval builder, TOPLEVEL_BINDING, __FILE__, __LINE__ # rubocop:disable Security/Eval
     end
   end
 end
