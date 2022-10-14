@@ -23,6 +23,11 @@ module RWS
 
     def option_parser
       OptionParser.new do |option|
+        option.on '--help', 'Print help info' do
+          puts option
+          exit 0
+        end
+
         option.on '--host HOST', 'Host to bind' do |arg|
           @host = arg
         end

@@ -44,4 +44,12 @@ RSpec.describe RWS::CLI do
 
     include_examples 'missing option argument', '--host'
   end
+
+  describe '--help' do
+    let(:argv) { ['--help'] }
+
+    it 'prints help info and exit' do
+      expect { run_cli }.to output(/Print help info/).to_stdout.and raise_error(SystemExit)
+    end
+  end
 end
