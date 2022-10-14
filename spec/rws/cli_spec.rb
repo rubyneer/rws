@@ -33,7 +33,7 @@ RSpec.describe RWS::CLI do
     include_examples 'missing option argument', '-p'
   end
 
-  describe '--host HOST' do
+  describe '-h, --host HOST' do
     let(:argv) { ['--host', '0.0.0.0'] }
 
     it 'run server with host param' do
@@ -43,5 +43,21 @@ RSpec.describe RWS::CLI do
     end
 
     include_examples 'missing option argument', '--host'
+  end
+
+  describe '--help' do
+    let(:argv) { ['--help'] }
+
+    it 'prints help info and exit' do
+      expect { run_cli }.to output(/Print help info/).to_stdout.and raise_error(SystemExit)
+    end
+  end
+
+  describe '--version' do
+    let(:argv) { ['--version'] }
+
+    it 'prints current version and exit' do
+      expect { run_cli }.to output(/#{RWS::VERSION}/).to_stdout.and raise_error(SystemExit)
+    end
   end
 end
