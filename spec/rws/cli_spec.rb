@@ -33,7 +33,7 @@ RSpec.describe RWS::CLI do
     include_examples 'missing option argument', '-p'
   end
 
-  describe '--host HOST' do
+  describe '-h, --host HOST' do
     let(:argv) { ['--host', '0.0.0.0'] }
 
     it 'run server with host param' do

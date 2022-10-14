@@ -28,7 +28,7 @@ module RWS
           exit 0
         end
 
-        option.on '--host HOST', 'Host to bind' do |arg|
+        option.on '-h, --host HOST', 'Host to bind' do |arg|
           @host = arg
         end
 
