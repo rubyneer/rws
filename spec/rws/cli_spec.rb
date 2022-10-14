@@ -52,4 +52,12 @@ RSpec.describe RWS::CLI do
       expect { run_cli }.to output(/Print help info/).to_stdout.and raise_error(SystemExit)
     end
   end
+
+  describe '--version' do
+    let(:argv) { ['--version'] }
+
+    it 'prints current version and exit' do
+      expect { run_cli }.to output(/#{RWS::VERSION}/).to_stdout.and raise_error(SystemExit)
+    end
+  end
 end

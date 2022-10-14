@@ -35,6 +35,11 @@ module RWS
         option.on '-p', '--port PORT', 'The TCP port to listen by server' do |arg|
           @port = arg.to_i
         end
+
+        option.on '--version', 'Current version' do
+          puts RWS::VERSION
+          exit 0
+        end
       end
     end
   end
