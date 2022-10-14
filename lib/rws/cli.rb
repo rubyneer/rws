@@ -21,6 +21,7 @@ module RWS
 
     private
 
+    # rubocop:disable Metrics/MethodLength
     def option_parser
       OptionParser.new do |option|
         option.on '--help', 'Print help info' do
@@ -42,5 +43,6 @@ module RWS
         end
       end
     end
+    # rubocop:enable Metrics/MethodLength
   end
 end
