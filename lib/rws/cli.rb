@@ -21,16 +21,28 @@ module RWS
 
     private
 
+    # rubocop:disable Metrics/MethodLength
     def option_parser
       OptionParser.new do |option|
-        option.on '--host HOST', 'Host to bind' do |arg|
+        option.on '--help', 'Print help info' do
+          puts option
+          exit 0
+        end
+
+        option.on '-h', '--host HOST', 'Host to bind' do |arg|
           @host = arg
         end
 
         option.on '-p', '--port PORT', 'The TCP port to listen by server' do |arg|
           @port = arg.to_i
         end
+
+        option.on '--version', 'Current version' do
+          puts RWS::VERSION
+          exit 0
+        end
       end
     end
+    # rubocop:enable Metrics/MethodLength
   end
 end
