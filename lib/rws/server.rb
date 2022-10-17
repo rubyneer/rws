@@ -13,16 +13,16 @@ module RWS
     DEFAULT_HOST = '0.0.0.0'
     DEFAULT_PORT = 7890
 
-    def initialize(host: nil, port: nil)
-      @host = host || DEFAULT_HOST
-      @port = port || DEFAULT_PORT
+    def initialize(host: DEFAULT_HOST, port: DEFAULT_PORT)
+      @host = host
+      @port = port
       @config = RWS::Configuration.new.load
     end
 
     def run
       TCPServer.open(@host, @port) do |server|
         puts "RWS version #{RWS::VERSION} started, host: #{@host}, port: #{@port}"
-        handle_clients(server)
+        serve_clients(server)
       rescue Interrupt
         shutdown
       end
@@ -30,20 +30,19 @@ module RWS
 
     private
 
-    def handle_clients(server)
+    def serve_clients(server)
       loop do
-        client = get_client(server)
+        client = next_client(server)
         break unless client
 
-        request = handle_request(client)
-        response = RWS::Response.new({ request: request }, @config[:app]).build
-        client.send_response(response)
+        response = handle_request(client)
+        send_response(client, response)
 
         client.close
       end
     end
 
-    def get_client(server)
+    def next_client(server)
       io = server.accept
       return unless io
 
@@ -57,7 +56,11 @@ module RWS
       puts 'Headers:'
       puts request.headers.map { |header, value| "\t#{header}: #{value}" }.join("\n")
 
-      request
+      RWS::Response.new({ request: request }, @config[:app]).build
+    end
+
+    def send_response(client, response)
+      client.send_response(response)
     end
 
     def shutdown

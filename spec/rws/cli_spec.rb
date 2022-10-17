@@ -5,7 +5,7 @@ require 'spec_helper'
 require 'rws/cli'
 
 RSpec.describe RWS::CLI do
-  subject(:run_cli) { described_class.new(argv).run }
+  subject(:run_cli) { described_class.call(argv) }
 
   shared_examples 'missing option argument' do |option|
     context 'without argument' do

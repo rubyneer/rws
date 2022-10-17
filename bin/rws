@@ -3,5 +3,4 @@
 
 require 'rws/cli'
 
-cli = RWS::CLI.new(ARGV.dup)
-cli.run
+RWS::CLI.call(ARGV.dup)
