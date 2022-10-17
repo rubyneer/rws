@@ -21,6 +21,18 @@ RSpec.describe RWS::CLI do
     allow(RWS::Server).to receive(:new).and_return(server_instance)
   end
 
+  describe '-c, --config FILEPATH' do
+    let(:argv) { ['-c', 'config.ru'] }
+
+    it 'loads config from passed filepath' do
+      run_cli
+
+      expect(RWS::Server).to have_received(:new).with(hash_including(config: 'config.ru'))
+    end
+
+    include_examples 'missing option argument', '-c'
+  end
+
   describe '-p, --port PORT' do
     let(:argv) { ['-p', '8080'] }
 

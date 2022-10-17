@@ -12,7 +12,7 @@ module RWS
       option_parser(options).parse!(argv.dup)
       exit if options[:need_to_exit]
 
-      RWS::Server.new(**options.slice(:host, :port)).run
+      RWS::Server.new(**options.slice(:host, :port, :config)).run
     end
 
     # rubocop:disable Metrics/MethodLength
@@ -29,6 +29,10 @@ module RWS
 
         option.on '-p', '--port PORT', 'The TCP port to listen by server' do |arg|
           options[:port] = arg.to_i
+        end
+
+        option.on '-c', '--config FILEPATH', 'Path to rackup-compatible config file' do |arg|
+          options[:config] = arg
         end
 
         option.on '--version', 'Current version' do

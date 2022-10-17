@@ -13,10 +13,10 @@ module RWS
     DEFAULT_HOST = '0.0.0.0'
     DEFAULT_PORT = 7890
 
-    def initialize(host: DEFAULT_HOST, port: DEFAULT_PORT)
+    def initialize(host: DEFAULT_HOST, port: DEFAULT_PORT, config: nil)
       @host = host
       @port = port
-      @config = RWS::Configuration.new.load
+      @config = RWS::Configuration.new(config).load
     end
 
     def run

@@ -6,8 +6,8 @@ module RWS
   class Configuration
     DEFAULT_CONFIG_FILE = 'config.ru'
 
-    def initialize(config_file = nil)
-      @config_file = config_file || DEFAULT_CONFIG_FILE
+    def initialize(config_file = DEFAULT_CONFIG_FILE)
+      @config_file = config_file
     end
 
     def load
