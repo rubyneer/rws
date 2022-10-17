@@ -5,7 +5,7 @@ require 'spec_helper'
 require 'rws/cli'
 
 RSpec.describe RWS::CLI do
-  subject(:run_cli) { described_class.new(argv).run }
+  subject(:run_cli) { described_class.call(argv) }
 
   shared_examples 'missing option argument' do |option|
     context 'without argument' do
@@ -19,6 +19,18 @@ RSpec.describe RWS::CLI do
     server_instance = instance_double(RWS::Server)
     allow(server_instance).to receive(:run)
     allow(RWS::Server).to receive(:new).and_return(server_instance)
+  end
+
+  describe '-c, --config FILEPATH' do
+    let(:argv) { ['-c', 'config.ru'] }
+
+    it 'loads config from passed filepath' do
+      run_cli
+
+      expect(RWS::Server).to have_received(:new).with(hash_including(config: 'config.ru'))
+    end
+
+    include_examples 'missing option argument', '-c'
   end
 
   describe '-p, --port PORT' do

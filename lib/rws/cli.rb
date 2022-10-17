@@ -6,40 +6,38 @@ require 'rws/server'
 
 module RWS
   class CLI
-    def initialize(argv)
-      @argv = argv.dup
+    def self.call(argv)
+      options = { need_to_exit: false }
 
-      @host = nil
-      @port = nil
+      option_parser(options).parse!(argv.dup)
+      exit if options[:need_to_exit]
 
-      option_parser.parse!(@argv)
+      RWS::Server.new(**options.slice(:host, :port, :config)).run
     end
-
-    def run
-      RWS::Server.new(host: @host, port: @port).run
-    end
-
-    private
 
     # rubocop:disable Metrics/MethodLength
-    def option_parser
+    def self.option_parser(options)
       OptionParser.new do |option|
         option.on '--help', 'Print help info' do
           puts option
-          exit 0
+          options[:need_to_exit] = true
         end
 
         option.on '-h', '--host HOST', 'Host to bind' do |arg|
-          @host = arg
+          options[:host] = arg
         end
 
         option.on '-p', '--port PORT', 'The TCP port to listen by server' do |arg|
-          @port = arg.to_i
+          options[:port] = arg.to_i
+        end
+
+        option.on '-c', '--config FILEPATH', 'Path to rackup-compatible config file' do |arg|
+          options[:config] = arg
         end
 
         option.on '--version', 'Current version' do
           puts RWS::VERSION
-          exit 0
+          options[:need_to_exit] = true
         end
       end
     end
